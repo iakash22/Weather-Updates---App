@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/cloud2.png" type="image/x-icon">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+
+        <!-- weather heading  -->
+        <h1>Weather App</h1>
+
+        <!-- user and search switch container -->
+        <div class="tab-container">
+            <p id="user-weather" class="tab">Your Weather</p>
+            <p id="search-weather" class="tab">Search Weather</p>
+        </div>
+
+        <!-- weather container  -->
+        <div class="weather-container">
+
+            <!-- user Grant Location container  -->
+            <div class="sub-container grant-location-container" id="grant-location">
+
+                <!-- Location Icon  -->
+                <img src="assets/location.png" alt="Location" width="80" height="80" loading="lazy">
+                <p>grant location Access</p>
+                <p>Allow Access to get weather information</p>
+
+                <!-- grant allow button  -->
+                <button class="btn" id="grant-btn">grant Access</button>
+            </div>
+
+            <!-- search bar  -->
+            <form class="form-container" id="data-search">
+                <input placeholder="Search for city..." id="search-input">
+                <button>
+                    <img src="/assets/search.png" alt="search" width="20" height="20">
+                </button>
+            </form>
+
+            <!-- Loading container  -->
+            <div class="sub-container loading-container">
+                <img src="./assets/loading.gif" alt="loading" width="150" height="150">
+                <p>Loading</p>
+            </div>
+
+            <!-- user city and search city information contrainer  -->
+            <div class="sub-container user-info-container">
+
+                <!-- city name and country flag -->
+                <div class="name">
+                    <p id="city-name"></p>
+                    <img id="country-img">
+                </div>
+
+                <!-- weather description  -->
+                <p id="weather-desc"></p>
+
+                <!-- weather-image  -->
+                <img id="weather-icon">
+
+                <!-- temprature -->
+                <p id="data-temp"></p>
+
+                <!-- Cards parameter container  -->
+                <div class="parameter-container">
+                    <!-- card-1  -->
+                    <div class="parameter">
+                        <img src="./assets/wind.png" alt="wind">
+                        <p>windspeed</p>
+                        <p id="windspeed"></p>
+                    </div>
+
+                    <!-- card-2  -->
+                    <div class="parameter">
+                        <img src="./assets/humidity.png" alt="windhumidity">
+                        <p>humidity</p>
+                        <p id="humidity"></p>
+                    </div>
+
+                    <!-- card-3  -->
+                    <div class="parameter">
+                        <img src="./assets/cloud.png" alt="cloud">
+                        <p>clouds</p>
+                        <p id="cloudiness"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="index.js"></script>
+</body>
+</html>
