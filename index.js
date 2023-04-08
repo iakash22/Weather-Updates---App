@@ -6,6 +6,10 @@ const grantAccessContainer = document.querySelector(".grant-location-container")
 const searchForm = document.getElementById("data-search");
 const loadingScreen = document.querySelector(".loading-container");
 const userInfoContainer = document.querySelector(".user-info-container");
+const grantAccessButton = document.getElementById("grant-btn");
+const errorConatiner = document.getElementById("error-container");
+const errorMsg = document.getElementById("apiErrorMsg");
+const retryBtn = document.getElementById("retryBtn");
 
 
 let oldTab = userTab;
@@ -22,10 +26,12 @@ function switchTab(newTab) {
         if(!searchForm.classList.contains("active")) {
             userInfoContainer.classList.remove("active");
             grantAccessContainer.classList.remove("active");
+            errorConatiner.classList.remove("active");
             searchForm.classList.add("active");
         }
         else {
             searchForm.classList.remove("active");
+            errorConatiner.classList.remove("active");
             userInfoContainer.classList.remove("active");
             getfromSessionStorage();
         }
@@ -56,6 +62,7 @@ function getfromSessionStorage() {
 async function fetchUserWeatherInfo(coordinates) {
     const {lat, lon} = coordinates;
     grantAccessContainer.classList.remove("active");
+    errorConatiner.classList.remove("active");
     loadingScreen.classList.add("active");
 
     //API CALL
@@ -64,19 +71,40 @@ async function fetchUserWeatherInfo(coordinates) {
             `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
         );
         const  data = await response.json();
-
+        if(!data.sys){
+            throw data;
+        }
         loadingScreen.classList.remove("active");
         userInfoContainer.classList.add("active");
         renderWeatherInfo(data);
     }
-    catch(err) {
+    catch(error) {
         loadingScreen.classList.remove("active");
-        //HW
-
+        errorConatiner.classList.add("active");
+        errorMsg.innerText = `Error : ${error?.message}`
+        retryBtn.addEventListener('click', () => {
+            errorConatiner.classList.remove("active");
+            grantAccessContainer.classList.add("active");
+        });
     }
-
 }
 
+function showError(error) {
+    switch (error.code) {
+    case error.PERMISSION_DENIED:
+        messageText.innerText = "You denied the request for Geolocation.";
+        break;
+    case error.POSITION_UNAVAILABLE:
+        messageText.innerText = "Location information is unavailable.";
+    break;
+    case error.TIMEOUT:
+        messageText.innerText = "The request to get user location timed out.";
+        break;
+    case error.UNKNOWN_ERROR:
+        messageText.innerText = "An unknown error occurred.";
+        break;
+    }
+}
 function renderWeatherInfo(data){
     
     const cityName = document.getElementById("city-name")
@@ -99,12 +127,15 @@ function renderWeatherInfo(data){
     cloudiness.innerText = `${data?.clouds?.all}%`;
 }
 
+const grantErrorMsg = document.getElementById("error-msg");
+
 function getLocation() {
     if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
     }
     else {
-        console.log("hw");
+        grantAccessButton.style.display = "none";
+        grantErrorMsg.innerText = "Geolocation is not supported by this browser";
     }
 }
 
@@ -120,7 +151,6 @@ function showPosition(position) {
 
 }
 
-const grantAccessButton = document.getElementById("grant-btn");
 grantAccessButton.addEventListener("click", getLocation);
 
 const searchInput = document.getElementById("search-input");
@@ -133,23 +163,36 @@ searchForm.addEventListener("submit", (e) => {
         return;
     else 
         fetchSearchWeatherInfo(cityName);
+        searchInput.value = "";
 })
 
 async function fetchSearchWeatherInfo(city) {
     loadingScreen.classList.add("active");
     userInfoContainer.classList.remove("active");
     grantAccessContainer.classList.remove("active");
+    errorConatiner.classList.remove("active");
 
     try {
         const response = await fetch(
             `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
         );
         const data = await response.json();
+        if(!data.sys){
+            throw data;
+        }
         loadingScreen.classList.remove("active");
         userInfoContainer.classList.add("active");
         renderWeatherInfo(data);
     }
     catch(err) {
-        console.log("HW");
+        loadingScreen.classList.remove("active");
+        userInfoContainer.classList.remove("active");
+        errorConatiner.classList.add("active");
+        errorMsg.innerText = err.message;
+        retryBtn.addEventListener('click',() => {
+            errorConatiner.classList.remove("active");
+        })
     }
 }
+
+

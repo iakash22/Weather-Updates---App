@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./assets/cloud2.png" type="image/x-icon">
-    <title>Document</title>
+    <title>Weather | Updates </title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,11 +28,11 @@
 
                 <!-- Location Icon  -->
                 <img src="assets/location.png" alt="Location" width="80" height="80" loading="lazy">
-                <p>grant location Access</p>
+                <p id="error-msg">grant location Access</p>
                 <p>Allow Access to get weather information</p>
 
                 <!-- grant allow button  -->
-                <button class="btn" id="grant-btn">grant Access</button>
+                <button class="btn" id="grant-btn"><div class="text">grant Access</div></button>
             </div>
 
             <!-- search bar  -->
@@ -90,6 +90,14 @@
                         <p id="cloudiness"></p>
                     </div>
                 </div>
+            </div>
+
+            <div class="sub-container error-container" id="error-container">
+                <img src="./assets/error.webp" alt="Error - 404">
+                <p id="apiErrorMsg"></p>
+                <button id="retryBtn">
+                    <img src="./assets/refresh.png" alt="refresh">
+                </button>
             </div>
         </div>
     </div>
